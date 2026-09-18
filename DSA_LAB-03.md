@@ -25,7 +25,7 @@ Here, we have the three services, along with their version and requirement
 
 docker compose up -d --build
 
-# 5. docker compose ps -a --- all the service that we have
+# 5. docker compose ps -a -- all the service that we have
 
 PS C:\Users\rahel\Documents\DSA\DSA_semester_project> docker compose ps -a
 NAME                                  IMAGE                               COMMAND                  SERVICE        CREATED       STATUS                       PORTS
@@ -79,7 +79,7 @@ itemsdb> db.items.find().pretty() # read from DB
 
 ![alt text](image.png)
 
-# 8. grpc down
+# 8. grpc failure
 
 ![alt text](image-4.png)
 
