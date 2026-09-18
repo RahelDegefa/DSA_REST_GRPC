@@ -1,0 +1,58 @@
+services:
+  mongodb:
+    image: mongo:8.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --quiet --eval 'db.adminCommand({ ping: 1 }).ok' | grep 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  grpc-service:
+    build:
+      context: ./grpc_service
+    command: python server.py
+    environment:
+      SERVICE_NAME: items-grpc-service
+      GRPC_PORT: "50051"
+      MONGO_URI: mongodb://mongodb:27017
+      MONGO_DB: itemsdb
+      MONGO_COLLECTION: items
+    ports:
+      - "50051:50051"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; s=socket.create_connection(('localhost', 50051), 2); s.close()"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+  rest-service:
+    build:
+      context: ./rest_service
+    command: python app.py
+    environment:
+      SERVICE_NAME: rest_service
+      PORT: "5000"
+      GRPC_TARGET: grpc-service:50051
+    ports:
+      - "8085:5000"
+    depends_on:
+      grpc-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health', timeout=2).read()"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  mongo-data:

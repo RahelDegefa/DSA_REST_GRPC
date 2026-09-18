@@ -1,0 +1,66 @@
+# 1. File structure
+DSA_semester_project/
+├── grpc_service/
+│   ├── client.py
+│   ├── Dockerfile
+│   ├── items_pb2_grpc.py
+│   ├── items_pb2.py
+│   ├── items.proto
+│   ├── requirements.txt
+│   └── server.py
+├── rest_service/
+│   ├── app.py
+│   ├── Dockerfile
+│   ├── items_pb2_grpc.py
+│   ├── items_pb2.py
+│   ├── reliability.py
+│   └── requirements.txt
+├── docker-compose.yml
+├── DSA_LAB-03.md
+├── items.proto
+├── image.png
+├── image-1.png
+├── image-2.png
+├── image-3.png
+└── image-4.png
+
+# 2. 
+
+| Method | Path        | Description                                |
+| GET    | /health     | Liveness check for the REST service itself |
+| GET    | /items      | List all items                             |
+| GET    | /items/<id> | Get a single item by id                    |
+| POST   | /items      | Create a new item                          |
+
+# 2. compose and start the services 
+
+# To the file directory. eg. cd DSA_semester_project
+
+docker compose up --build
+
+# 3. 
+docker compose down
+
+# 4. start/stop a single container
+
+docker start/stop container_ID
+
+# 5. Create an Item - postman
+
+http://localhost:8085/items?Content-Type=application/json
+
+{
+  "name": "Arista_CSV Conference",
+  "status": "open",
+  "location": "Frankfurt",
+  "date": "Sep.30.2026 - Oct.10.2026"
+}
+
+# 6. GET Item
+
+http://localhost:8085/items?Content-Type=application/json
+
+# 7. GET Item by ID
+
+http://localhost:8085/items/12
+

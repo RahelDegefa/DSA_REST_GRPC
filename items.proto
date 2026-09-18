@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package dsa.items;
+
+message Item {
+    string name = 1;
+    string date = 2;
+    string status = 3;
+    string location = 4;
+    string id =5;
+}
+
+message ItemIdRequest {
+    string id = 1;
+}
+
+message ListItemRequest {}
+
+message CreateItemRequest {
+    string name = 1;
+    string date = 2;
+    string status = 3;
+    string location = 4;
+}
+
+message AddItemResult {
+    int32 created_count = 1;
+    int32 total_count = 2;
+}
+
+message ChatMessage {
+    string sender = 1;
+    string message = 2;   // Fixed: Changed duplicate name from 'sender' to 'message'
+    int32 sequence = 3;
+}
+
+service ItemService {
+    rpc GetItemById(ItemIdRequest) returns (Item);                  // Fixed: 'returns'
+    rpc ListItems(ListItemRequest) returns (stream Item);           // Fixed: 'returns'
+    rpc AddItems(stream CreateItemRequest) returns (AddItemResult); // Fixed: 'returns'
+    rpc ChatAbouttItem(stream ChatMessage) returns (stream ChatMessage); // Fixed: 'returns' and added missing ';'
+}
